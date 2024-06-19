@@ -27,14 +27,15 @@ Imports:
     Rcpp,
     ggplot2, 
     jjb,
-    reshape2
+    reshape2,
+    rgen
 LinkingTo: 
     Rcpp,
     RcppArmadillo,
     rgen
 Suggests: simcdm
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-US
