@@ -86,7 +86,8 @@ auto_edina = function(data, k = 2:4,
     criterions = matrix(NA, nrow = num_k, ncol = 4)
     colnames(criterions) = c("k", "bic", "dic", "ppp")
 
-    for(i in seq_along(k)) {
+    # Use mclapply for parallel processing
+    results = parallel::mclapply(seq_along(k), function(i) {
         k_idx = k[i]
         message("Working on k = ", k_idx, " ... ")
 
@@ -97,12 +98,15 @@ auto_edina = function(data, k = 2:4,
 
         modeled_value_summary = summary(modeled_value)
 
-        outobj[[i]] = modeled_value_summary
+        list(modeled_value_summary = modeled_value_summary,
+             model_fit = modeled_value_summary[["model_fit"]],
+             timing = modeled_value_summary[["timing"]][3])
+    }, mc.cores = parallel::detectCores(logical = FALSE) - 1) # Use all cores except one
 
-        criterions[i,] = outobj[[i]][["model_fit"]]
-
-        message("Time Elapsed: ",  outobj[[i]][["timing"]][3])
-
+    for (i in seq_along(results)) {
+        outobj[[i]] = results[[i]]$modeled_value_summary
+        criterions[i,] = results[[i]]$model_fit
+        message("Time Elapsed: ", results[[i]]$timing)
     }
 
     # Output all EDINA objects
