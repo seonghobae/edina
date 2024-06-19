@@ -24,6 +24,7 @@
 #' [parameter_evolution_graph()]
 #'
 #' @export
+#' @importFrom parallel mclapply detectCores
 #' @examples
 #' if(requireNamespace("simcdm", quietly = TRUE)) {
 #'
